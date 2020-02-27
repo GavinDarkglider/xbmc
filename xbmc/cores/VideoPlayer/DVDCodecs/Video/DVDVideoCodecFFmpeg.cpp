@@ -334,8 +334,26 @@ bool CDVDVideoCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options
   m_processInfo.SetSwDeinterlacingMethods();
   m_processInfo.SetVideoInterlaced(false);
 
-  pCodec = avcodec_find_decoder(hints.codec);
-
+  switch (hints.codec){
+    AV_CODEC_ID_H264:
+      pCodec = avcodec_find_decoder_by_name("h264_nvmpi");
+      break;
+    AV_CODEC_ID_HEVC:
+      pCodec = avcodec_find_decoder_by_name("hevc_nvmpi");
+      break;
+    AV_CODEC_ID_VP9:
+      pCodec = avcodec_find_decoder_by_name("vp9_nvmpi");
+      break;
+    AV_CODEC_ID_MPEG4:
+      pCodec = avcodec_find_decoder_by_name("mpeg4_nvmpi");
+      break;
+    AV_CODEC_ID_MPEG2VIDEO:
+      pCodec = avcodec_find_decoder_by_name("mpeg2_nvmpi");
+      break;
+    DEFAULT:
+      pCodec = avcodec_find_decoder(hints.codec);
+      break;
+  }
   if(pCodec == NULL)
   {
     CLog::Log(LOGDEBUG,"CDVDVideoCodecFFmpeg::Open() Unable to find codec %d", hints.codec);
