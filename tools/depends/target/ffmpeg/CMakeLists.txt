@@ -115,6 +115,7 @@ externalproject_add(ffmpeg
                       --enable-protocol=http
                       --enable-encoder=png
                       --enable-encoder=mjpeg
+		      --enable-nvmpi
                       ${ffmpeg_conf})
 
 install(CODE "Message(Done)")

@@ -163,6 +163,7 @@ CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" \
 	--enable-zlib \
 	--disable-mipsdsp \
 	--disable-mipsdspr2 \
+	--enable-nvmpi
         ${FLAGS}
 
 make -j ${BUILDTHREADS}
