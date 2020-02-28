@@ -396,7 +396,7 @@ bool CDVDVideoCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options
     m_decoderState = STATE_SW_SINGLE;
 
   // if we don't do this, then some codecs seem to fail.
-  /*m_pCodecContext->coded_height = hints.height;
+  m_pCodecContext->coded_height = hints.height;
   m_pCodecContext->coded_width = hints.width;
   m_pCodecContext->bits_per_coded_sample = hints.bitsperpixel;
 
@@ -405,7 +405,7 @@ bool CDVDVideoCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options
     m_pCodecContext->extradata_size = hints.extrasize;
     m_pCodecContext->extradata = (uint8_t*)av_mallocz(hints.extrasize + AV_INPUT_BUFFER_PADDING_SIZE);
     memcpy(m_pCodecContext->extradata, hints.extradata, hints.extrasize);
-  }*/
+  }
 
   // advanced setting override for skip loop filter (see avcodec.h for valid options)
   //! @todo allow per video setting?
