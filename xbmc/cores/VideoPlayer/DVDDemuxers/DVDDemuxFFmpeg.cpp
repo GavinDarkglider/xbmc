@@ -2099,8 +2099,30 @@ void CDVDDemuxFFmpeg::ParsePacket(AVPacket *pkt)
 
       parser->second->m_parserCtx = av_parser_init(st->codecpar->codec_id);
 
-      AVCodec *codec = avcodec_find_decoder(st->codecpar->codec_id);
-      if (codec == nullptr)
+      AVCodec *codec; /*= avcodec_find_decoder(st->codecpar->codec_id);*/
+      switch (st->codecpar->codec_id)
+      {
+        case AV_CODEC_ID_H264: //h264
+          codec = avcodec_find_decoder_by_name("h264_nvmpi");
+          break;
+        case AV_CODEC_ID_HEVC: //hevc
+          codec = avcodec_find_decoder_by_name("hevc_nvmpi");
+          break;
+        case AV_CODEC_ID_VP9: //vp9
+          codec = avcodec_find_decoder_by_name("vp9_nvmpi");
+          break;
+        case AV_CODEC_ID_MPEG4: //MPEG4
+          codec = avcodec_find_decoder_by_name("mpeg4_nvmpi");
+          break;
+        case AV_CODEC_ID_MPEG2VIDEO: //MPEG2
+          codec = avcodec_find_decoder_by_name("mpeg2_nvmpi");
+          break;
+        default: // everything else
+          codec = avcodec_find_decoder(st->codecpar->codec_id);
+          break;
+      }
+ 
+     if (codec == nullptr)
       {
         CLog::Log(LOGERROR, "%s - can't find decoder", __FUNCTION__);
         m_parsers.erase(parser);

@@ -396,7 +396,7 @@ bool CDVDVideoCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options
     m_decoderState = STATE_SW_SINGLE;
 
   // if we don't do this, then some codecs seem to fail.
-  m_pCodecContext->coded_height = hints.height;
+  /*m_pCodecContext->coded_height = hints.height;
   m_pCodecContext->coded_width = hints.width;
   m_pCodecContext->bits_per_coded_sample = hints.bitsperpixel;
 
@@ -405,7 +405,7 @@ bool CDVDVideoCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options
     m_pCodecContext->extradata_size = hints.extrasize;
     m_pCodecContext->extradata = (uint8_t*)av_mallocz(hints.extrasize + AV_INPUT_BUFFER_PADDING_SIZE);
     memcpy(m_pCodecContext->extradata, hints.extradata, hints.extrasize);
-  }
+  }*/
 
   // advanced setting override for skip loop filter (see avcodec.h for valid options)
   //! @todo allow per video setting?
@@ -456,7 +456,6 @@ bool CDVDVideoCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options
   const char* pixFmtName = av_get_pix_fmt_name(m_pCodecContext->pix_fmt);
   m_processInfo.SetVideoDimensions(m_pCodecContext->coded_width, m_pCodecContext->coded_height);
   m_processInfo.SetVideoPixelFormat(pixFmtName ? pixFmtName : "");
-
   m_dropCtrl.Reset(true);
   m_eof = false;
   return true;
@@ -735,10 +734,9 @@ CDVDVideoCodec::VCReturn CDVDVideoCodecFFmpeg::GetPicture(VideoPicture* pVideoPi
   else if (ret)
   {
     CLog::Log(LOGERROR, "%s - avcodec_receive_frame returned failure", __FUNCTION__);
-    CLog::Log(LOGERROR, "%i - avcodec_recieve_frame error", ret);
     return VC_ERROR;
   }
-
+  CLog::Log(LOGERROR, "We made it this far");
   // here we got a frame
   int64_t framePTS = m_pDecodedFrame->best_effort_timestamp;
 
@@ -991,6 +989,7 @@ bool CDVDVideoCodecFFmpeg::GetPictureCommon(VideoPicture* pVideoPicture)
   pVideoPicture->color_space = m_pCodecContext->colorspace;
   pVideoPicture->colorBits = 8;
   // determine how number of bits of encoded video
+  CLog::Log(LOGERROR, "%i pixformat", m_pCodecContext->pix_fmt);
   if (m_pCodecContext->pix_fmt == AV_PIX_FMT_YUV420P12)
     pVideoPicture->colorBits = 12;
   else if (m_pCodecContext->pix_fmt == AV_PIX_FMT_YUV420P10)

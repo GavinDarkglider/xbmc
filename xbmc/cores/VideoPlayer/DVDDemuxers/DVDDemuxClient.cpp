@@ -132,7 +132,29 @@ bool CDVDDemuxClient::ParsePacket(DemuxPacket* pkt)
 
   if (stream->m_context == nullptr)
   {
-    AVCodec *codec = avcodec_find_decoder(st->codec);
+    //AVCodec *codec = avcodec_find_decoder(st->codec);
+    AVCodec *codec;
+ switch (st->codec)
+  {
+    case AV_CODEC_ID_H264: //h264
+       codec = avcodec_find_decoder_by_name("h264_nvmpi");
+       break;
+    case AV_CODEC_ID_HEVC: //hevc
+       codec = avcodec_find_decoder_by_name("hevc_nvmpi");
+       break;
+    case AV_CODEC_ID_VP9: //vp9
+       codec = avcodec_find_decoder_by_name("vp9_nvmpi");
+       break;
+     case AV_CODEC_ID_MPEG4: //MPEG4
+       codec = avcodec_find_decoder_by_name("mpeg4_nvmpi");
+       break;
+     case AV_CODEC_ID_MPEG2VIDEO: //MPEG2
+       codec = avcodec_find_decoder_by_name("mpeg2_nvmpi");
+       break;
+     default: // everything else
+       codec = avcodec_find_decoder(st->codec);
+       break;
+    }
     if (codec == nullptr)
     {
       CLog::Log(LOGERROR, "%s - can't find decoder", __FUNCTION__);
