@@ -160,12 +160,8 @@ bool VideoPlayerCodec::Init(const CFileItem &file, unsigned int filecache)
 
   CDVDStreamInfo hint(*pStream, true);
 
-  CAEStreamInfo::DataType ptStreamTye = GetPassthroughStreamType(hint.codec, hint.samplerate);
+  CAEStreamInfo::DataType ptStreamTye = GetPassthroughStreamType(hint.codec, hint.samplerate, hint.profile);
   m_pAudioCodec = CDVDFactoryCodec::CreateAudioCodec(hint, *m_processInfo.get(), true, true, ptStreamTye);
-
-  CAEStreamInfo::DataType ptStreamTye =
-      GetPassthroughStreamType(hint.codec, hint.samplerate, hint.profile);
-  m_pAudioCodec = CDVDFactoryCodec::CreateAudioCodec(hint, *m_processInfo, true, true, ptStreamTye);
 
   if (!m_pAudioCodec)
   {

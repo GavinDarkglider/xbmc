@@ -334,26 +334,28 @@ bool CDVDVideoCodecFFmpeg::Open(CDVDStreamInfo &hints, CDVDCodecOptions &options
   m_processInfo.SetSwDeinterlacingMethods();
   m_processInfo.SetVideoInterlaced(false);
 
-  switch (hints.codec){
-    AV_CODEC_ID_H264:
+  switch (hints.codec)
+  {
+    case AV_CODEC_ID_H264: //h264
       pCodec = avcodec_find_decoder_by_name("h264_nvmpi");
       break;
-    AV_CODEC_ID_HEVC:
+    case AV_CODEC_ID_HEVC: //hevc
       pCodec = avcodec_find_decoder_by_name("hevc_nvmpi");
       break;
-    AV_CODEC_ID_VP9:
+    case AV_CODEC_ID_VP9: //vp9
       pCodec = avcodec_find_decoder_by_name("vp9_nvmpi");
       break;
-    AV_CODEC_ID_MPEG4:
+    case AV_CODEC_ID_MPEG4: //MPEG4
       pCodec = avcodec_find_decoder_by_name("mpeg4_nvmpi");
       break;
-    AV_CODEC_ID_MPEG2VIDEO:
+    case AV_CODEC_ID_MPEG2VIDEO: //MPEG2
       pCodec = avcodec_find_decoder_by_name("mpeg2_nvmpi");
       break;
-    DEFAULT:
+    default: // everything else
       pCodec = avcodec_find_decoder(hints.codec);
       break;
   }
+  
   if(pCodec == NULL)
   {
     CLog::Log(LOGDEBUG,"CDVDVideoCodecFFmpeg::Open() Unable to find codec %d", hints.codec);
@@ -733,6 +735,7 @@ CDVDVideoCodec::VCReturn CDVDVideoCodecFFmpeg::GetPicture(VideoPicture* pVideoPi
   else if (ret)
   {
     CLog::Log(LOGERROR, "%s - avcodec_receive_frame returned failure", __FUNCTION__);
+    CLog::Log(LOGERROR, "%i - avcodec_recieve_frame error", ret);
     return VC_ERROR;
   }
 
